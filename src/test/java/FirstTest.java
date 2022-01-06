@@ -1,63 +1,80 @@
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import model.Booking;
+import model.BookingDates;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import utils.ApiHelper;
 
-public class FirstTest {
+public class FirstTest extends BaseTest {
   ApiHelper apiHelper = new ApiHelper();
 
   @Test
   void getBookingIds() {
-    Response response =
-        RestAssured.given().when().get("https://restful-booker.herokuapp.com/booking");
+    Response response = RestAssured.given().when().get("/booking/");
     response.then().statusCode(HttpStatus.SC_OK);
     response.body().prettyPrint();
   }
 
   @Test
   void getBooking() {
-    Response response =
-        RestAssured.given().when().get("https://restful-booker.herokuapp.com/booking/20");
+    Response response = RestAssured.given().when().get("/booking/10");
     response.then().statusCode(HttpStatus.SC_OK);
   }
 
   @Test
   void createBooking() {
+    Booking booking =
+        Booking.builder()
+            .firstname("Jim")
+            .lastname("Brown")
+            .totalprice(111)
+            .depositpaid(true)
+            .bookingdates(BookingDates.builder().checkin("").checkout("").build())
+            .additionalneeds("Breakfast")
+            .build();
+    Response response =
+        RestAssured.given().contentType(ContentType.JSON).body(booking).when().post("/booking/");
+    response.then().statusCode(HttpStatus.SC_OK);
+    response.body().prettyPrint();
+  }
+
+  @Test
+  void updateBooking() {
+    String token = "token=" + apiHelper.generateToken();
+    Booking booking =
+        Booking.builder()
+            .firstname("Jim")
+            .lastname("Brown")
+            .totalprice(111)
+            .depositpaid(true)
+            .bookingdates(BookingDates.builder().checkin("").checkout("").build())
+            .additionalneeds("Breakfast")
+            .build();
     Response response =
         RestAssured.given()
-            .body(
-                "{\n"
-                    + "    \"firstname\" : \"Jim\",\n"
-                    + "    \"lastname\" : \"Brown\",\n"
-                    + "    \"totalprice\" : 111,\n"
-                    + "    \"depositpaid\" : true,\n"
-                    + "    \"bookingdates\" : {\n"
-                    + "        \"checkin\" : \"2018-01-01\",\n"
-                    + "        \"checkout\" : \"2019-01-01\"\n"
-                    + "    },\n"
-                    + "    \"additionalneeds\" : \"Breakfast\"\n"
-                    + "}")
-            .contentType(ContentType.JSON)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .header("Cookie", token)
+            .body(booking)
             .when()
-            .post("https://restful-booker.herokuapp.com/booking");
+            .put("/booking/4");
     response.then().statusCode(HttpStatus.SC_OK);
     response.body().prettyPrint();
   }
 
   @Test
   void partialUpdateBooking() {
-    String token = apiHelper.generateToken();
+    String token = "token=" + apiHelper.generateToken();
     Response response =
         RestAssured.given()
-            .header("Cookie", "token=" + token)
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-            .body(
-                "{\n" + "    \"firstname\" : \"James\",\n" + "    \"lastname\" : \"Brown\"\n" + "}")
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .header("Cookie", token)
+            .body(Booking.builder().firstname("James").lastname("Black").build())
             .when()
-            .patch("https://restful-booker.herokuapp.com/booking/14");
+            .patch("/booking/4");
     response.then().statusCode(HttpStatus.SC_OK);
     response.body().prettyPrint();
   }
@@ -71,7 +88,7 @@ public class FirstTest {
             .header("Authorization", "Basic YWRtaW46cGFzc3dvcmQxMjM=")
             .contentType(ContentType.JSON)
             .when()
-            .delete("https://restful-booker.herokuapp.com/booking/8");
+            .delete("/booking/2");
     response.then().statusCode(HttpStatus.SC_CREATED);
   }
 }
