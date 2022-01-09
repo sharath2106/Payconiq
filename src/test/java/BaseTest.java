@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
@@ -15,9 +16,11 @@ public class BaseTest {
 
   protected static RequestSpecification requestSpec;
   protected int bookingId;
+  protected static Faker faker;
 
   @BeforeAll
   static void beforeAll() {
+    faker = new Faker();
     String token = "token=" + new ApiHelper().generateToken();
     RestAssured.baseURI = "https://restful-booker.herokuapp.com";
     requestSpec =

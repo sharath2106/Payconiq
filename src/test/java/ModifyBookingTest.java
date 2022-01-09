@@ -10,12 +10,12 @@ public class ModifyBookingTest extends BaseTest {
   void createBooking() {
     Booking booking =
         Booking.builder()
-            .firstname("Jim")
-            .lastname("Brown")
-            .totalprice(111)
+            .firstname(faker.name().firstName())
+            .lastname(faker.name().lastName())
+            .totalprice(12)
             .depositpaid(true)
             .bookingdates(BookingDates.builder().checkin("").checkout("").build())
-            .additionalneeds("Breakfast")
+            .additionalneeds(faker.food().fruit())
             .build();
     Response response =
         RestAssured.given().spec(requestSpec).body(booking).when().post("/booking/");
@@ -27,9 +27,9 @@ public class ModifyBookingTest extends BaseTest {
   void updateBooking() {
     Booking booking =
         Booking.builder()
-            .firstname("Jim")
-            .lastname("Brown")
-            .totalprice(111)
+            .firstname(faker.name().firstName())
+            .lastname(faker.name().lastName())
+            .totalprice(12)
             .depositpaid(true)
             .bookingdates(BookingDates.builder().checkin("").checkout("").build())
             .additionalneeds("Breakfast")
@@ -44,8 +44,8 @@ public class ModifyBookingTest extends BaseTest {
   void partialUpdateBooking() {
     Booking requestBody =
         Booking.builder()
-            .firstname("James")
-            .lastname("Black")
+            .firstname(faker.name().firstName())
+            .lastname(faker.name().lastName())
             .bookingdates(BookingDates.builder().checkin("").checkout("").build())
             .build();
     Response response =
