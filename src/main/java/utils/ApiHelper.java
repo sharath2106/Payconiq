@@ -7,6 +7,8 @@ import model.Login;
 
 public class ApiHelper {
   public String generateToken() {
+    Login loginRequestBody =
+        Login.builder().username(System.getenv("user")).password(System.getenv("password")).build();
     Response response =
         RestAssured.given()
             .body(loginRequestBody)

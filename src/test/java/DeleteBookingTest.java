@@ -1,30 +1,24 @@
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class DeleteBookingTest extends BaseTest {
   @Test
-  void deleteBooking() {
+  @DisplayName("should return 200 when the booking is deleted successfully")
+  void verifySuccessfulDeletionOfBooking() {
     Response response =
-        RestAssured.given()
-            .spec(requestSpec)
-            .contentType(ContentType.JSON)
-            .when()
-            .delete("/booking/" + bookingId);
+        RestAssured.given().spec(requestSpec).when().delete("/booking/" + bookingId);
     response.then().statusCode(HttpStatus.SC_CREATED);
   }
 
   @Test
-  void deleteBookingThatDoesntExists() {
-    int wrongBookingId = bookingId + 1;
+  @DisplayName("should return 404 when trying to delete a booking that's not-available/invalid")
+  void verifyUserIsNotAbleToDeleteAnInvalidBookingId() {
+    int wrongBookingId = bookingId + Integer.MAX_VALUE;
     Response response =
-        RestAssured.given()
-            .spec(requestSpec)
-            .contentType(ContentType.JSON)
-            .when()
-            .delete("/booking/" + 90);
-    response.then().statusCode(HttpStatus.SC_BAD_REQUEST);
+        RestAssured.given().spec(requestSpec).when().delete("/booking/" + wrongBookingId);
+    response.then().statusCode(HttpStatus.SC_NOT_FOUND);
   }
 }
