@@ -16,17 +16,17 @@ public class BaseTest {
 
   protected static RequestSpecification requestSpec;
   protected int bookingId;
-  protected static Faker faker;
+  protected Faker faker = Faker.instance();
+  protected static String BOOKING_API = "/booking/";
 
   @BeforeAll
   static void beforeAll() {
-    faker = new Faker();
     String token = "token=" + new ApiHelper().generateToken();
     RestAssured.baseURI = "https://restful-booker.herokuapp.com";
     requestSpec =
         new RequestSpecBuilder()
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Accept", "application/json")
+            .setAccept("application/json")
+            .setContentType("application/json")
             .addHeader("Cookie", token)
             .build();
   }
@@ -50,7 +50,7 @@ public class BaseTest {
             .additionalneeds("Breakfast")
             .build();
     Response response =
-        RestAssured.given().spec(requestSpec).body(booking).when().post("/booking/");
+        RestAssured.given().spec(requestSpec).body(booking).when().post(BOOKING_API);
     response.then().statusCode(HttpStatus.SC_OK);
     bookingId = response.then().extract().path("bookingid");
   }
