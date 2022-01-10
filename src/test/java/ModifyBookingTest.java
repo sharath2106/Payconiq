@@ -9,11 +9,13 @@ import model.BookingDates;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class ModifyBookingTest extends BaseTest {
 
   @Test
+  @Tag("update-booking")
   @DisplayName("user should update the booking id successfully and return 200")
   void verifyUserIsAbleToSuccessfullyUpdateUserBooking() {
     String firstName = faker.name().firstName();
@@ -46,6 +48,7 @@ public class ModifyBookingTest extends BaseTest {
   }
 
   @Test
+  @Tag("update-booking")
   @DisplayName(
       "user should not be able to update booking when the request body is invalid/empty and return 400")
   void verifyUserIsNotAbleToUpdateBookingWithEmptyOrInvalidRequest() {
@@ -61,6 +64,7 @@ public class ModifyBookingTest extends BaseTest {
   }
 
   @Test
+  @Tag("update-booking")
   @Disabled("Test is disabled as the response code is not returning 404")
   @DisplayName("return 404 when trying to update an invalid booking id")
   void verifyUpdateBookingForInvalidBookingId() {
@@ -78,6 +82,7 @@ public class ModifyBookingTest extends BaseTest {
   }
 
   @Test
+  @Tag("update-booking")
   @DisplayName("user should partially update the booking and return 200")
   void verifyUserIsAbleToUpdateBookingPartially() {
     String firstName = faker.name().firstName();
