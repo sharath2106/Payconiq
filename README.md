@@ -59,7 +59,7 @@ Remember to change the `export` above to `SET` if you're running a Windows machi
 
 ```sh
 # Get into the directory
-$ cd Payconiq-Automation
+$ cd Payconiq
 ```
 
 To run tests in LOCAL machine, execute the following command -
