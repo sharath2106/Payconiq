@@ -1,3 +1,5 @@
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -7,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import model.Booking;
 import model.BookingDates;
+import model.CreateBooking;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +24,8 @@ public class BaseTest {
 
   @BeforeAll
   static void beforeAll() {
-    String token = "token=" + new ApiHelper().generateToken();
     RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+    String token = "token=" + new ApiHelper().generateToken();
     requestSpec =
         new RequestSpecBuilder()
             .setAccept("application/json")
@@ -37,21 +40,33 @@ public class BaseTest {
   }
 
   private void createBooking() {
+    String firstName = "Jim";
+    String lastName = "Brown";
+    int totalPrice = 111;
     String checkinDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
     String checkoutDate = LocalDate.now().plusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+    String additionalNeeds = "Breakfast";
     Booking booking =
         Booking.builder()
-            .firstname("Jim")
-            .lastname("Brown")
-            .totalprice(111)
+            .firstname(firstName)
+            .lastname(lastName)
+            .totalprice(totalPrice)
             .depositpaid(true)
             .bookingdates(
                 BookingDates.builder().checkin(checkinDate).checkout(checkoutDate).build())
-            .additionalneeds("Breakfast")
+            .additionalneeds(additionalNeeds)
             .build();
     Response response =
         RestAssured.given().spec(requestSpec).body(booking).when().post(BOOKING_API);
-    response.then().statusCode(HttpStatus.SC_OK);
-    bookingId = response.then().extract().path("bookingid");
+
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+    CreateBooking createBooking = response.as(CreateBooking.class);
+    assertThat(createBooking.getBooking().getFirstname()).isEqualTo(firstName);
+    assertThat(createBooking.getBooking().getLastname()).isEqualTo(lastName);
+    assertThat(createBooking.getBooking().getTotalprice()).isEqualTo(totalPrice);
+    assertThat(createBooking.getBooking().getBookingdates().checkin).isEqualTo(checkinDate);
+    assertThat(createBooking.getBooking().getBookingdates().checkout).isEqualTo(checkoutDate);
+    assertThat(createBooking.getBooking().getAdditionalneeds()).isEqualTo(additionalNeeds);
+    bookingId = createBooking.getBookingid();
   }
 }

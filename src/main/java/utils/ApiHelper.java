@@ -14,7 +14,7 @@ public class ApiHelper {
             .body(loginRequestBody)
             .contentType(ContentType.JSON)
             .when()
-            .post("https://restful-booker.herokuapp.com/auth");
+            .post("/auth");
     return response.then().extract().path("token");
   }
 }

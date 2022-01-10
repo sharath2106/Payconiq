@@ -1,4 +1,5 @@
 import static io.restassured.RestAssured.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.response.Response;
 import java.time.LocalDate;
@@ -11,8 +12,9 @@ public class GetBookingTest extends BaseTest {
   @Test
   @DisplayName("should return list of all bookings")
   void getAllBookingIds() {
-    Response response = given().when().get();
-    response.then().statusCode(HttpStatus.SC_OK);
+    Response response = given().when().get(BOOKING_API);
+    assertThat(response.body()).isNotNull();
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
   }
 
   @Test
@@ -20,25 +22,28 @@ public class GetBookingTest extends BaseTest {
   void getBookingIdByFirstNameAndLastName() {
     Response response =
         given().param("firstname", "Jim").param("lastname", "Brown").when().get(BOOKING_API);
-    response.then().statusCode(HttpStatus.SC_OK);
+    assertThat(response.body()).isNotNull();
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
   }
 
   @Test
-  @DisplayName("should return list of available bookings for the checkin and checkout dates")
+  @DisplayName("should return list of available bookings for the checkin date")
   void getBookingIdByCheckinDate() {
     Response response =
         given()
             .param("checkin", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE))
             .when()
             .get(BOOKING_API);
-    response.then().statusCode(HttpStatus.SC_OK);
+    assertThat(response.body()).isNotNull();
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
   }
 
   @Test
   @DisplayName("should return booking details for the booking id")
   void verifyBookingDetailsForTheBookingId() {
     Response response = given().when().get(BOOKING_API + bookingId);
-    response.then().statusCode(HttpStatus.SC_OK);
+    assertThat(response.body()).isNotNull();
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
   }
 
   @Test
@@ -46,6 +51,6 @@ public class GetBookingTest extends BaseTest {
   void verifyBookingIsNotAvailableForInvalidBookingId() {
     int invalidBookingId = bookingId + Integer.MAX_VALUE;
     Response response = given().when().get(BOOKING_API + invalidBookingId);
-    response.then().statusCode(HttpStatus.SC_NOT_FOUND);
+    assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
   }
 }
