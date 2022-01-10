@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class GetBookingTest extends BaseTest {
   @Test
-  @Tag("get-booking")
+  @Tag("getBooking")
   @DisplayName("should return list of all bookings")
   void getAllBookingIds() {
     Response response = given().when().get(BOOKING_API);
@@ -20,7 +20,7 @@ public class GetBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("get-booking")
+  @Tag("getBooking")
   @DisplayName("should return list of available bookings for the first and last name")
   void getBookingIdByFirstNameAndLastName() {
     Response response =
@@ -30,7 +30,7 @@ public class GetBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("get-booking")
+  @Tag("getBooking")
   @DisplayName("should return list of available bookings for the checkin date")
   void getBookingIdByCheckinDate() {
     Response response =
@@ -43,7 +43,7 @@ public class GetBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("get-booking")
+  @Tag("getBooking")
   @DisplayName("should return booking details for the booking id")
   void verifyBookingDetailsForTheBookingId() {
     Response response = given().when().get(BOOKING_API + bookingId);
@@ -52,7 +52,7 @@ public class GetBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("get-booking")
+  @Tag("getBooking")
   @DisplayName("should return no booking details for invalid booking id")
   void verifyBookingIsNotAvailableForInvalidBookingId() {
     int invalidBookingId = bookingId + Integer.MAX_VALUE;

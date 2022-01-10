@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class ModifyBookingTest extends BaseTest {
 
   @Test
-  @Tag("update-booking")
+  @Tag("updateBooking")
   @DisplayName("user should update the booking id successfully and return 200")
   void verifyUserIsAbleToSuccessfullyUpdateUserBooking() {
     String firstName = faker.name().firstName();
@@ -48,7 +48,7 @@ public class ModifyBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("update-booking")
+  @Tag("updateBooking")
   @DisplayName(
       "user should not be able to update booking when the request body is invalid/empty and return 400")
   void verifyUserIsNotAbleToUpdateBookingWithEmptyOrInvalidRequest() {
@@ -64,11 +64,11 @@ public class ModifyBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("update-booking")
+  @Tag("updateBooking")
   @Disabled("Test is disabled as the response code is not returning 404")
   @DisplayName("return 404 when trying to update an invalid booking id")
   void verifyUpdateBookingForInvalidBookingId() {
-    int wrongBookingId = bookingId + Integer.MAX_VALUE;
+    int invalidBookingId = bookingId + Integer.MAX_VALUE;
     Booking booking =
         Booking.builder()
             .firstname(faker.name().firstName())
@@ -77,12 +77,12 @@ public class ModifyBookingTest extends BaseTest {
             .depositpaid(true)
             .build();
     Response response =
-        given().spec(requestSpec).body(booking).when().put(BOOKING_API + wrongBookingId);
+        given().spec(requestSpec).body(booking).when().put(BOOKING_API + invalidBookingId);
     assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
   }
 
   @Test
-  @Tag("update-booking")
+  @Tag("updateBooking")
   @DisplayName("user should partially update the booking and return 200")
   void verifyUserIsAbleToUpdateBookingPartially() {
     String firstName = faker.name().firstName();

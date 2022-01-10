@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class DeleteBookingTest extends BaseTest {
   @Test
-  @Tag("delete-booking")
+  @Tag("deleteBooking")
   @DisplayName("should return 200 when the booking is deleted successfully")
   void verifySuccessfulDeletionOfBooking() {
     Response response = given().spec(requestSpec).when().delete(BOOKING_API + bookingId);
@@ -18,7 +18,7 @@ public class DeleteBookingTest extends BaseTest {
   }
 
   @Test
-  @Tag("delete-booking")
+  @Tag("deleteBooking")
   @Disabled("Test is disabled as the response code is not returning 404")
   @DisplayName("should return 404 when trying to delete a booking that's not-available/invalid")
   void verifyUserIsNotAbleToDeleteAnInvalidBookingId() {

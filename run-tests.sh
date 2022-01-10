@@ -4,4 +4,5 @@ set -x
 export USER="admin"
 export PASSWORD="password123"
 
-mvn spotless:apply && mvn clean test
+mvn spotless:apply
+mvn clean test -D groups=$TAG
