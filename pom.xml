@@ -20,6 +20,8 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <javafaker.version>1.0.2</javafaker.version>
         <assertj-core.version>3.21.0</assertj-core.version>
+        <aspectj.version>1.8.10</aspectj.version>
+        <allure-junit5.version>2.13.6</allure-junit5.version>
     </properties>
 
     <dependencies>
@@ -53,6 +55,11 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure-junit5.version}</version>
         </dependency>
     </dependencies>
 
@@ -95,6 +102,14 @@
                     <properties>
                         <includeTags>${tag}</includeTags>
                     </properties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.8</version>
+                <configuration>
+                    <reportVersion>2.4.1</reportVersion>
                 </configuration>
             </plugin>
         </plugins>
